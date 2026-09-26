@@ -1,0 +1,29 @@
+# 비밀 정보
+.env
+*.env
+!.env.example
+
+# Java / Gradle
+backend/build/
+backend/.gradle/
+*.class
+
+# Python
+__pycache__/
+.venv/
+*.pyc
+
+# Node
+node_modules/
+
+# IDE
+.idea/
+.vscode/settings.json
+
+# VSCode 개인 설정
+.vscode/
+
+# Claude Code 개인 설정 (CLAUDE.md, .claude/rules 는 올림)
+.claude/settings.local.json
+DEVLOG.md
+TROUBLESHOOTING.md
