@@ -1,6 +1,6 @@
 # 프로젝트: job-trend-analyzer (IT 채용공고 기반 기술스택 격차 분석)
 
-> 작업 시작 전 반드시 루트의 STATUS.md 를 먼저 읽고, "지금 할 일"만 진행한다.
+> 작업 시작 전 반드시 루트의 STATUS.md 를 먼저 읽고, "남은 일"을 위에서부터 하나씩 진행한다.
 
 ## 1. 목적
 - 개발 학원 개인 결과물, 비전공 초보자의 첫 포트폴리오 (v1: 2026-09-23 ~ 09-28, 이후 v2)
@@ -14,7 +14,7 @@
 - DB: Supabase PostgreSQL (Seoul). psycopg로 SQL 직접 작성, ORM 사용 안 함
   - 접속은 반드시 Session pooler (Direct는 IPv6 전용이라 Render/Actions에서 실패)
 - 수집: Python 스크립트 + GitHub Actions cron (하루 1회)
-- 데이터: Remotive 공개 API (category=software-dev). 사람인 승인 대기, 공공데이터 백업
+- 데이터: Remotive 공개 API + RemoteOK 공개 API (Remotive는 category 필터가 동작하지 않아 파라미터 없이 호출) 사람인 승인 대기, 공공데이터 백업
 - AI: Claude API, 결과는 ai_analysis 테이블에 캐시 (같은 입력이면 재호출 안 함)
 - 배포: Render (Docker 없이)
 - 제외: Kafka, Kubernetes, MSA, Redis, Agent, n8n, Docker, RAG
@@ -25,12 +25,14 @@
 db/
   schema.sql          # 테이블/VIEW/RLS (확정 ERD)
   seed_tech.sql       # 기술 사전 초기 데이터
+  001_add_remoteok_source.sql  # source에 'remoteok' 추가
 collector/            # 수집기 (실행: 루트에서 python collector/main.py)
   main.py             # 전체 흐름 실행
-  remotive.py         # API 호출
+  remotive.py         # Remotive API 호출
+  remoteok.py         # RemoteOK API 호출
   transform.py        # 정제/직무 분류/기술 추출
   db.py               # DB 저장
-app/                  # FastAPI (09-27 작성 예정)
+app/                  # FastAPI
 .github/workflows/collect.yml
 .claude/rules/        # backend.md, frontend.md, general.md
 requirements.txt
