@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <!-- 모바일에서도 화면 폭에 맞게 보이도록 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>직무별 기술 통계</title>
+  <style>
+    /* 전체 기본 모양 */
+    body { font-family: sans-serif; max-width: 720px; margin: 0 auto; padding: 16px; color: #222; background: #fff; }
+    /* 직무 선택 링크들을 가로로 나열 */
+    nav a { display: inline-block; margin: 0 6px 6px 0; padding: 6px 12px; border: 1px solid #ccc; border-radius: 16px; text-decoration: none; color: #333; }
+    /* 현재 선택된 직무 강조 */
+    nav a.active { background: #2b6cb0; border-color: #2b6cb0; color: #fff; font-weight: bold; }
+    .sample { color: #666; margin: 8px 0 16px; }
+    /* 기술 한 줄: 이름 | 막대 | 숫자 */
+    .row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+    .name { width: 110px; flex-shrink: 0; }
+    .bar-bg { flex: 1; background: #eee; height: 16px; border-radius: 4px; }
+    .bar { background: #2b6cb0; height: 100%; border-radius: 4px; }
+    .num { width: 110px; flex-shrink: 0; text-align: right; font-size: 14px; }
+    .empty { padding: 24px; background: #f6f6f6; border-radius: 8px; text-align: center; }
+    footer { margin-top: 32px; font-size: 13px; color: #888; }
+  </style>
+</head>
+<body>
+  <h1>직무별 기술 통계</h1>
+
+  {# 이렇게 생긴 주석은 Jinja2 주석: 브라우저로 보내지지 않는다 (HTML 주석과 달리 페이지 소스에도 안 보임) #}
+  {# 직무 선택: roles 리스트를 하나씩 꺼내 링크를 만든다 #}
+  {# {% for 변수 in 리스트 %} ... {% endfor %} : Jinja2 반복문 #}
+  <nav>
+    {% for r in roles %}
+      {# {{ 값 }} : 값을 화면에 출력. 현재 직무면 class="active" 추가 #}
+      <a href="/?role={{ r }}" class="{{ 'active' if r == stats.role else '' }}">{{ r }}</a>
+    {% endfor %}
+  </nav>
+
+  {% if stats.total_postings == 0 %}
+    {# 공고가 0개면 안내만 보여준다 #}
+    <p class="empty">아직 수집된 공고가 없어요</p>
+  {% else %}
+    {# 표본 크기를 함께 보여줘서 "3개 중 100%" 같은 오해를 막는다 #}
+    <p class="sample"><b>{{ stats.role }}</b> 공고 <b>{{ stats.total_postings }}</b>개 기준</p>
+
+    {% for t in stats.techs %}
+      <div class="row">
+        <span class="name">{{ t.name }}</span>
+        {# 막대 길이 = 비율(%) 그대로 width에 넣음 #}
+        <div class="bar-bg"><div class="bar" style="width: {{ t.ratio }}%"></div></div>
+        <span class="num">{{ t.ratio }}% ({{ t.count }}개)</span>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <footer>
+    데이터 출처: <a href="https://remotive.com" target="_blank">Remotive</a>,
+    <a href="https://remoteok.com" target="_blank">RemoteOK</a> (해외 원격 공고 기준)
+  </footer>
+</body>
+</html>
