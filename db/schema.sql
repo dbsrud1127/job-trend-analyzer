@@ -46,7 +46,7 @@ CREATE TABLE seeker_profile (
 CREATE TABLE job_posting (
     id                    BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     source                VARCHAR(20)  NOT NULL
-                          CHECK (source IN ('remotive','saramin','public_data','user_input')),
+                          CHECK (source IN ('remotive','remoteok','saramin','public_data','user_input')),
     source_id             VARCHAR(100),                    -- 원본 사이트의 공고 ID (user_input은 NULL)
     title                 VARCHAR(300) NOT NULL,
     company_name          VARCHAR(200),
