@@ -27,7 +27,7 @@ jobs:
         run: python collector/main.py          # 로컬과 같은 실행 명령 (루트 기준)
         env:                                   # .env 대신 GitHub Secrets에서 DB 정보 주입
           DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_PORT: 5432
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
